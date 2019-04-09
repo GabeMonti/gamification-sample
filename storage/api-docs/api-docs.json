@@ -1,0 +1,660 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "GAMIFICATION",
+        "description": "GAMIFICATION endpoints",
+        "termsOfService": "http://swagger.io/terms/",
+        "license": {
+            "name": "MIT",
+            "url": "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
+        },
+        "version": "1.0.0"
+    },
+    "host": "api",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "multipart/form-data"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/auth/signin": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Log a user in",
+                "description": "verify if an user exist and logs into the app",
+                "operationId": "loginUser",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "user email",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "user password ",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "200": {
+                        "description": "token"
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "register a new user, email param must be unique to the system",
+                "description": "verify if an user exist and logs into the app",
+                "operationId": "loginUser",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "user name",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "user email",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "user password ",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "type",
+                        "in": "formData",
+                        "description": "user type",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "200": {
+                        "description": "token"
+                    }
+                }
+            }
+        },
+        "/auth/forgotpassword": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "The user needs to reset the password",
+                "description": "Send a email to reset the password link",
+                "operationId": "forgotPassword",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "user email",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Email cannot be send by server"
+                    },
+                    "200": {
+                        "description": "Email sent for reset"
+                    }
+                }
+            }
+        },
+        "/auth/resetvalidate": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "The user session need to be validate before to reset the password",
+                "description": "This will return true or false to user token to reset the password",
+                "operationId": "resetvalidate",
+                "responses": {
+                    "404": {
+                        "description": "Token not found"
+                    },
+                    "203": {
+                        "description": "Token is not authorize"
+                    },
+                    "200": {
+                        "description": "The token is correct"
+                    }
+                }
+            }
+        },
+        "/auth/changepassword": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "This is used to change the password of the user",
+                "description": "Send a email to reset the password link",
+                "operationId": "changepassword",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "formData",
+                        "description": "User ID in the plataform",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "new password to change",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "token",
+                        "in": "formData",
+                        "description": "Token from the reset Password",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Email cannot be send by server"
+                    },
+                    "200": {
+                        "description": "Password was changed"
+                    }
+                }
+            }
+        },
+        "/get/categories": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get a list of all available categories that the current organization posess, organizationId from token",
+                "description": "This will return an array of all categories",
+                "operationId": "get/categories",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Token not found"
+                    },
+                    "203": {
+                        "description": "Token is not authorize"
+                    },
+                    "200": {
+                        "description": "List of categories"
+                    }
+                }
+            }
+        },
+        "/set/category": {
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Set Category and info from organizationId",
+                "description": "verify if an user exist and logs into the app",
+                "operationId": "set/category",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "organizationId",
+                        "in": "formData",
+                        "description": "organizationId",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "categoryName",
+                        "in": "formData",
+                        "description": "categoryName",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "description": "description",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "userTarget",
+                        "in": "formData",
+                        "description": "userTarget",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "coverImage",
+                        "in": "formData",
+                        "description": "coverImage",
+                        "required": true,
+                        "type": "file"
+                    },
+                    {
+                        "name": "maxSlots",
+                        "in": "formData",
+                        "description": "maxSlots",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "trailGroups",
+                        "in": "formData",
+                        "description": "trailGroups as an array with ids",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "200": {
+                        "description": "token"
+                    }
+                }
+            }
+        },
+        "/set/availability": {
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Set user specialist Availability in our platform, recursively",
+                "description": "Set user specialist Availability in our platform, recursively",
+                "operationId": "set/availability",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "categoryId",
+                        "in": "formData",
+                        "description": "organizationId",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "availability",
+                        "in": "formData",
+                        "description": "Array of all the availabilities, ex.\n     *\n     *           {\n     *           categoryId : 1,\n     *           availability : {\n     *           monday : [\n     *           ],\n     *           tuesday :  [\n     *\n     *           ],\n     *           webnesday :  [\n     *\n     *           ],\n     *           thursday:  [\n     *              18:00\n     *           ],\n     *           friday: []\n     *           }\n     *           }\n     *     ",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "200": {
+                        "description": "token"
+                    }
+                }
+            }
+        },
+        "/get/availability/{categoryId}/{userId}": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "Get a list of all available timeslots for a specifc category AND/OR user",
+                "description": "Get a list of all available timeslots for a specifc category AND/OR user",
+                "operationId": "get/availability",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "monthId",
+                        "in": "path",
+                        "description": "monthId",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "categoryId",
+                        "in": "path",
+                        "description": "categoryId",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "userId",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Token not found"
+                    },
+                    "203": {
+                        "description": "Token is not authorize"
+                    },
+                    "200": {
+                        "description": "List of categories"
+                    }
+                }
+            }
+        },
+        "/schedule/session": {
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "schedule a session or event inside our platform",
+                "description": "schedule a session or event inside our platform",
+                "operationId": "schedule/session",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "organizationId",
+                        "in": "formData",
+                        "description": "organizationId",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "categoryName",
+                        "in": "formData",
+                        "description": "categoryName",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "description": "description",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "userTarget",
+                        "in": "formData",
+                        "description": "userTarget",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "coverImage",
+                        "in": "formData",
+                        "description": "coverImage",
+                        "required": true,
+                        "type": "file"
+                    },
+                    {
+                        "name": "maxSlots",
+                        "in": "formData",
+                        "description": "maxSlots",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "trailGroups",
+                        "in": "formData",
+                        "description": "trailGroups as an array with ids",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "200": {
+                        "description": "token"
+                    }
+                }
+            }
+        },
+        "/user/info": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserInfo",
+                "description": "Fetch all of user Info",
+                "operationId": "UserInfo",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array with the user info"
+                    },
+                    "400": {
+                        "description": "{message : User not found , status : 400}"
+                    }
+                }
+            }
+        },
+        "/user/session": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserInfo",
+                "description": "Fetch token status",
+                "operationId": "Token Status",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array with the token status"
+                    },
+                    "400": {
+                        "description": "{message : Token Expired , status : 400}"
+                    }
+                }
+            }
+        },
+        "/yoda/register": {
+            "post": {
+                "tags": [
+                    "Yoda"
+                ],
+                "summary": "Log a user in",
+                "description": "verify if an user exist and logs into the app",
+                "operationId": "yoda",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "user email",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "user password ",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "200": {
+                        "description": "token"
+                    }
+                }
+            }
+        },
+        "/yoda/get-company-id-with-slug": {
+            "post": {
+                "tags": [
+                    "company"
+                ],
+                "summary": "Need to get the company ID using the slug",
+                "description": "When need to get the company ID using the Slug in the login Screen after that use the toke\n     * connection",
+                "operationId": "getCompanyId",
+                "parameters": [
+                    {
+                        "name": "websiteSlug",
+                        "in": "formData",
+                        "description": "webSite Slug to send and get the company ID to make the login in the right place",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The company was find"
+                    }
+                }
+            }
+        },
+        "/yoda/get-company-states": {
+            "get": {
+                "tags": [
+                    "company"
+                ],
+                "summary": "Get the company state possible",
+                "description": "Get the company state possible",
+                "operationId": "getCompanyId",
+                "responses": {
+                    "200": {
+                        "description": "The company was find"
+                    }
+                }
+            }
+        },
+        "/yoda/set-company-states": {
+            "get": {
+                "tags": [
+                    "company"
+                ],
+                "summary": "Set a new state for company",
+                "description": "This you can change the company according the necessary",
+                "operationId": "setCompanyId",
+                "responses": {
+                    "200": {
+                        "description": "The company was find"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {},
+    "externalDocs": {
+        "description": "find more info here",
+        "url": "https://swagger.io/about"
+    }
+}
